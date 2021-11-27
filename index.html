@@ -64,8 +64,17 @@
 
 
             function random_building() {
+                var number_of_buildings = all_buildings.length;
+                console.log(number_of_buildings);
+
+                var random_building_number = Math.floor(Math.random() * number_of_buildings)
+                console.log(random_building_number);
+
+                var random_building = all_buildings[random_building_number];
+                console.log(random_building);
 
             }
+            random_building();
 
         });
 
