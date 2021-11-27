@@ -16,6 +16,56 @@
         #map {
             height: 500px;
         }
+
+        @keyframes orangey {
+            0% {
+                background-color: rgb(173, 55, 25)
+            }
+
+            10% {
+                background-color: rgb(187, 70, 34)
+            }
+
+            20% {
+                background-color: rgb(200, 12, 50)
+            }
+
+            30% {
+                background-color: rgb(220, 80, 10)
+            }
+
+            40% {
+                background-color: rgb(224, 90, 50)
+            }
+
+            50% {
+                background-color: rgb(230, 150, 122)
+            }
+
+            60% {
+                background-color: rgb(205, 120, 69)
+            }
+
+            70% {
+                background-color: rgb(130, 104, 4)
+            }
+
+            80% {
+                background-color: rgb(150, 123, 80)
+            }
+
+            90% {
+                background-color: rgb(160, 80, 50)
+            }
+
+            100% {
+                background-color: rgb(173, 55, 25)
+            }
+        }
+
+        body {
+            animation: 60s orangey infinite;
+        }
     </style>
 </head>
 
@@ -102,12 +152,12 @@
                             console.log(lat);
                             console.log(lon);
 
-                            // add corners to an array
-                            var latlong = "[" + lat + ", " + lon + "]";
-                            console.log(latlong);
-                            latlongs = localStorage.getItem('latlongs') || latlong;
-                            latlongs.push(latlong);
-                            localStorage.setItem('latlongs', latlongs);
+                            // add corners to an array                                                         // it feels like
+                            var latlong = "[" + lat + ", " + lon + "]";                                        // there should be 
+                            console.log(latlong);                                                              // a simpler way
+                            latlongs = localStorage.getItem('latlongs') || latlong;                            // of doing this
+                            latlongs.push(latlong);                                                            // but im tired 
+                            localStorage.setItem('latlongs', latlongs);                                        // someone help pls
                         })
                 }
                 // localStorage.setItem('latlongs', latlongs);
