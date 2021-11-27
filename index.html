@@ -54,16 +54,22 @@
     const overpass_query = "https://overpass-api.de/api/interpreter?data=%2F*%0AThis%20has%20been%20generated%20by%20the%20overpass-turbo%20wizard.%0AThe%20original%20search%20was%3A%0A%E2%80%9Cbuilding%20in%20bbox%E2%80%9D%0A*%2F%0A%5Bout%3Ajson%5D%5Btimeout%3A25%5D%3B%0A%2F%2F%20gather%20results%0A%28%0A%20%20%2F%2F%20query%20part%20for%3A%20%E2%80%9Cbuilding%E2%80%9D%0A%20%20%0A%20%20way%5B%22building%22%5D%28" + bounding_box_for_query + "%29%3B%0A%29%3B%0A%2F%2F%20print%20results%0Aout%20body%3B%0A%3E%3B%0Aout%20skel%20qt%3B";
     console.log(overpass_query);                                                                                            // save to console for debugging        
     document.getElementById('debug2').innerHTML = "<a href='" + overpass_query + "'>" + overpass_query + "</a>";            // display on page for debugging
-    https://overpass-api.de/api/interpreter?data=%2F*%0AThis%20has%20been%20generated%20by%20the%20overpass-turbo%20wizard.%0AThe%20original%20search%20was%3A%0A%E2%80%9Cbuilding%20in%20bbox%E2%80%9D%0A*%2F%0A%5Bout%3Ajson%5D%5Btimeout%3A25%5D%3B%0A%2F%2F%20gather%20results%0A%28%0A%20%20%2F%2F%20query%20part%20for%3A%20%E2%80%9Cbuilding%E2%80%9D%0A%20%20%0A%20%20way%5B%22building%22%5D%2853.46140498075295%2C-2.2782897949218754%2C53.47417818728507%2C-2.196578979492188%29%3B%0A%29%3B%0A%2F%2F%20print%20results%0Aout%20body%3B%0A%3E%3B%0Aout%20skel%20qt%3B
+
     // fetch all buildings on map
     fetch(overpass_query)
         .then(response => response.json())
         .then(data => {
-            const all_buildings = data.elements;
+            const stuff = data.elements;
+            console.log(stuff);
+
+            // remove building nodes (corners of buildings), just leaving ways (building outlines)
+            const all_buildings = stuff.filter(function (remove_nodes) {
+                return remove_nodes.type === 'way';
+            });
             console.log(all_buildings);
 
-
-            function random_building() {
+            // pick a random building
+            function random_building() {                                                  // i dont know whether this needs to be an async function or not
                 var number_of_buildings = all_buildings.length;
                 console.log(number_of_buildings);
 
@@ -73,9 +79,46 @@
                 var random_building = all_buildings[random_building_number];
                 console.log(random_building);
 
+
+                // get the corners of the chosen random building
+                var nodes = random_building.nodes;
+                let latlongs = [];
+                localStorage.setItem('latlongs', latlongs);
+                console.log(nodes);
+
+                // for each corner (node), generate a request URL to get the lat/long
+                for (each in nodes) {
+                    console.log(nodes[each]);
+                    var node_fetch_url = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%3B%20%28%0A%20%20node%28" + nodes[each] + "%29%3B%0A%29%3B%20%28._%3B%3E%3B%29%3B%20out%3B";
+
+                    // send request
+                    fetch(node_fetch_url)
+                        .then(response => response.json())
+                        .then(data => {
+                            // set lat and long of the corner
+                            console.log(data);
+                            var lat = data.elements[0].lat;
+                            var lon = data.elements[0].lon;
+                            console.log(lat);
+                            console.log(lon);
+
+                            // add corners to an array
+                            var latlong = "[" + lat + ", " + lon + "]";
+                            console.log(latlong);
+                            latlongs = localStorage.getItem('latlongs') || latlong;
+                            latlongs.push(latlong);
+                            localStorage.setItem('latlongs', latlongs);
+                        })
+                }
+                // localStorage.setItem('latlongs', latlongs);
+                var polygon = L.polygon(latlongs, { color: 'red' }).addTo(map);
             }
             random_building();
 
+            // display a building on the map
+            function display_building() {
+
+            }
         });
 
 
