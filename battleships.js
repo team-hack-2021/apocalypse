@@ -11,4 +11,5 @@ const bounds_west = bounds._southWest.lng;
 // assemble bounds in the format overpass wants
 const bounding_box = bounds_north + "," + bounds_east + "," + bounds_south + "," + bounds_west;
 console.log(bounding_box);
+document.getElementById('debug').innerHTML = "bounding box coordinates: " + bounding_box;
 
