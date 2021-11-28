@@ -112,56 +112,73 @@
             const stuff = data.elements;
             console.log(stuff);
 
-            // remove building nodes (corners of buildings), just leaving ways (building outlines)
-            const all_buildings = stuff.filter(function (remove_nodes) {
-                return remove_nodes.type === 'way';
+            // // remove building nodes (corners of buildings), just leaving ways (building outlines)
+            // const all_buildings = stuff.filter(function (remove_nodes) {
+            //      return remove_nodes.type === 'way';
+            //  });
+
+            // remove building ways (outlines) leaving just nodes (corners of buildings)
+            const all_building_corners = stuff.filter(function (remove_ways) {
+                return remove_ways.type === 'node';
             });
-            console.log(all_buildings);
+            console.log(all_building_corners);
+
 
             // pick a random building
-            function random_building() {                                                  // i dont know whether this needs to be an async function or not
-                var number_of_buildings = all_buildings.length;
+            function random_building() {
+                var number_of_buildings = all_building_corners.length;
                 console.log(number_of_buildings);
 
                 var random_building_number = Math.floor(Math.random() * number_of_buildings)
                 console.log(random_building_number);
 
-                var random_building = all_buildings[random_building_number];
-                console.log(random_building);
+                var random_building_corner = all_building_corners[random_building_number];
+                console.log(random_building_corner);
 
+                // this bit is all commented out as were not bothering with the whole way stuff any more.
+                //  // get the corners of the chosen random building
+                //  var nodes = random_building.nodes;
+                //  let latlongs = [];
+                //  localStorage.setItem('latlongs', latlongs);
+                //  console.log(nodes);
 
-                // get the corners of the chosen random building
-                var nodes = random_building.nodes;
-                let latlongs = [];
-                localStorage.setItem('latlongs', latlongs);
-                console.log(nodes);
+                //  // for each corner (node), generate a request URL to get the lat/long
+                //  for (each in nodes) {
+                //      console.log(nodes[each]);
+                //      var node_fetch_url = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%3B%20%28%0A%20%20node%28" + nodes[each] + "%29%3B%0A%29%3B%20%28._%3B%3E%3B%29%3B%20out%3B";
 
-                // for each corner (node), generate a request URL to get the lat/long
-                for (each in nodes) {
-                    console.log(nodes[each]);
-                    var node_fetch_url = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%3B%20%28%0A%20%20node%28" + nodes[each] + "%29%3B%0A%29%3B%20%28._%3B%3E%3B%29%3B%20out%3B";
+                //      // send request
+                //      fetch(node_fetch_url)
+                //          .then(response => response.json())
+                //          .then(data => {
+                //              // set lat and long of the corner
+                //              console.log(data);
+                //              var lat = data.elements[0].lat;
+                //              var lon = data.elements[0].lon;
+                //              console.log(lat);
+                //              console.log(lon);
 
-                    // send request
-                    fetch(node_fetch_url)
-                        .then(response => response.json())
-                        .then(data => {
-                            // set lat and long of the corner
-                            console.log(data);
-                            var lat = data.elements[0].lat;
-                            var lon = data.elements[0].lon;
-                            console.log(lat);
-                            console.log(lon);
-
-                            // add corners to an array                                                         // it feels like
-                            var latlong = "[" + lat + ", " + lon + "]";                                        // there should be 
-                            console.log(latlong);                                                              // a simpler way
-                            latlongs = localStorage.getItem('latlongs') || latlong;                            // of doing this
-                            latlongs.push(latlong);                                                            // but im tired 
-                            localStorage.setItem('latlongs', latlongs);                                        // someone help pls
-                        })
-                }
+                //              // add corners to an array                                                         // it feels like
+                //              var latlong = "[" + lat + ", " + lon + "]";                                        // there should be 
+                //              console.log(latlong);                                                              // a simpler way
+                //              latlongs = localStorage.getItem('latlongs') || latlong;                            // of doing this
+                //              latlongs.push(latlong);                                                            // but im tired 
+                //              localStorage.setItem('latlongs', latlongs);                                        // someone help pls
+                //          })
+                //  }
                 // localStorage.setItem('latlongs', latlongs);
-                var polygon = L.polygon(latlongs, { color: 'red' }).addTo(map);
+                //  var polygon = L.polygon(latlongs, { color: 'red' }).addTo(map);
+
+
+                // get coordinates of chosen building corner
+                var random_building_corner_lat = random_building_corner.lat;
+                var random_building_corner_lon = random_building_corner.lon;
+                var latlong = [];
+                latlong.push(random_building_corner_lat);
+                latlong.push(random_building_corner_lon);
+                console.log(latlong);
+                L.marker(latlong).addTo(map);
+
             }
             random_building();
 
