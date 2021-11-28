@@ -315,23 +315,17 @@
         fetch(destroyed_buildings_url)
             .then(response => response.json())
             .then(data => {
+                console.log(building_corners_store);
                 const destroyed_buildings = data.elements;
                 console.log(destroyed_buildings);
 
-                // make these buildings destroyed
-                function matchIds(building_corners_store) {
-                    for (each in destroyed_buildings) {                                                                //  this bit will check in each of the destroyed buildings
-                        for (each in enemy_nodes) {                                                                    //  whether any are included in enemy_nodes
-                            return destroyed_buildings[each].nodes.includes(enemy_nodes)                               //  it doesnt work properly
-                        };
-
-
-
-
-                    }
+                // find if any enemy buildings have been destroyed, returns true if so
+                var destroyed_building_nodes = [];
+                for (each in destroyed_buildings) {
+                    destroyed_building_nodes.push(destroyed_buildings[each].id);
                 }
-                building_corners_store.find(matchIds).role = role;
-                console.log(building_corners_store.find(matchIds));
+                console.log(destroyed_building_nodes.some(r => enemy_nodes.includes(r)));
+
 
                 // get number of buildings and not corners
                 let destroyed_ways_and_relations = destroyed_buildings.filter(function (not_nodes) {
