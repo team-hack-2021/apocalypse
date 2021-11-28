@@ -86,7 +86,8 @@
         }
 
         body {
-            animation: 60s orangey infinite;
+            background-color: orange;
+            animation: 60s heurot infinite;
             font-family: 'OCR', 'OCR-A', 'OCR-B', 'OCR A', 'OCR B', 'OCR A Extended', 'OCR B Extended', monospace;
         }
 
@@ -205,10 +206,10 @@
                 return remove_ways.type === 'node';
             });
             console.log(all_building_corners);
-
+            var building_corners_store = all_building_corners;
 
             // pick a random building
-            function random_building() {
+            function random_building(role) {
                 var number_of_buildings = all_building_corners.length;
                 console.log(number_of_buildings);
 
@@ -218,39 +219,15 @@
                 var random_building_corner = all_building_corners[random_building_number];
                 console.log(random_building_corner);
 
-                // this bit is all commented out as were not bothering with the whole way stuff any more.
-                //  // get the corners of the chosen random building
-                //  var nodes = random_building.nodes;
-                //  let latlongs = [];
-                //  localStorage.setItem('latlongs', latlongs);
-                //  console.log(nodes);
+                function matchIds(building_corners_store) {
+                    return id = random_building_corner.id;
+                }
+                building_corners_store.find(matchIds).role = role;
+                console.log(building_corners_store.find(matchIds));
 
-                //  // for each corner (node), generate a request URL to get the lat/long
-                //  for (each in nodes) {
-                //      console.log(nodes[each]);
-                //      var node_fetch_url = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%3B%20%28%0A%20%20node%28" + nodes[each] + "%29%3B%0A%29%3B%20%28._%3B%3E%3B%29%3B%20out%3B";
 
-                //      // send request
-                //      fetch(node_fetch_url)
-                //          .then(response => response.json())
-                //          .then(data => {
-                //              // set lat and long of the corner
-                //              console.log(data);
-                //              var lat = data.elements[0].lat;
-                //              var lon = data.elements[0].lon;
-                //              console.log(lat);
-                //              console.log(lon);
 
-                //              // add corners to an array                                                        
-                //              var latlong = "[" + lat + ", " + lon + "]";                                        
-                //              console.log(latlong);                                                              
-                //              latlongs = localStorage.getItem('latlongs') || latlong;                            
-                //              latlongs.push(latlong);                                                             
-                //              localStorage.setItem('latlongs', latlongs);                                        
-                //          })
-                //  }
-                // localStorage.setItem('latlongs', latlongs);
-                //  var polygon = L.polygon(latlongs, { color: 'red' }).addTo(map);
+
 
 
                 // get coordinates of chosen building corner
@@ -260,10 +237,25 @@
                 latlong.push(random_building_corner_lat);
                 latlong.push(random_building_corner_lon);
                 console.log(latlong);
-                L.marker(latlong).addTo(map);
+                var home_icon = L.icon({
+                    iconUrl: 'house-orange.svg',
+                    iconSize: [40, 40]
+                });
+                if (role === 'player') {
+                    L.marker(latlong, {
+                        icon: home_icon
+                    }).addTo(map);
+                }
+
 
             }
-            random_building();
+            random_building('player');
+            random_building('player');
+            random_building('player');
+            random_building('enemy');
+            random_building('enemy');
+            random_building('enemy');
+
 
             // function to display any building on the map
             function display_map(node_id) {
@@ -303,6 +295,10 @@
         var coords = player_nuke_marker.getLatLng();
         var circle = L.circle(coords, { radius: 200 })
             .addTo(map);
+
+        // display a bang
+        var bang_position = document.querySelector(marker - draggable).getBoundingClientRect();
+        console.log(bang_position);
 
         // format coordinates for overpass
         var coords_for_overpass = coords.lat + ", " + coords.lng;
