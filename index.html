@@ -86,7 +86,7 @@
         }
 
         body {
-            background-color: orange;
+            background-color: rgb(233, 78, 25);
             animation: 60s heurot infinite;
             font-family: 'OCR', 'OCR-A', 'OCR-B', 'OCR A', 'OCR B', 'OCR A Extended', 'OCR B Extended', monospace;
         }
@@ -99,7 +99,7 @@
 
 <body>
     <img src="logo-line.svg" style="width:60vw;height:auto;margin:auto;padding:20px;">
-    <div class="choice">
+    <div class="choice" style="display:none;">
         <form>
             <input type="radio" id="manchester_option" name="location_radios" checked><label for="manchester_option"
                 id="manchester_option_label">Oxford Rd, Manchester</label>
@@ -186,8 +186,11 @@
     console.log(overpass_query);                                                                                            // save to console for debugging        
     document.getElementById('debug2').innerHTML = "<a href='" + overpass_query + "'>" + overpass_query + "</a>";            // display on page for debugging
 
-    // initialise the score
+    // initialise the scores etc
+    var building_corners_store = [];
     var number_of_buildings_destroyed = 0;
+    let player_nodes = [];
+    let enemy_nodes = [];
 
     // fetch all buildings on map
     fetch(overpass_query)
@@ -206,7 +209,7 @@
                 return remove_ways.type === 'node';
             });
             console.log(all_building_corners);
-            var building_corners_store = all_building_corners;
+            building_corners_store = all_building_corners;
 
             // pick a random building
             function random_building(role) {
@@ -245,6 +248,9 @@
                     L.marker(latlong, {
                         icon: home_icon
                     }).addTo(map);
+                    player_nodes.push(random_building_corner.id);
+                } else if (role === 'enemy') {
+                    enemy_nodes.push(random_building_corner.id);
                 }
 
 
@@ -271,7 +277,7 @@
                 console.log(lat_long);
                 L.marker(lat_long).addTo(map);
             }
-            // display_map(226464660);
+            //////// display_map(226464660);
 
 
         });
@@ -297,8 +303,8 @@
             .addTo(map);
 
         // display a bang
-        var bang_position = document.querySelector(marker - draggable).getBoundingClientRect();
-        console.log(bang_position);
+        // var bang_position = document.querySelector(marker - draggable).getBoundingClientRect();
+        // console.log(bang_position);
 
         // format coordinates for overpass
         var coords_for_overpass = coords.lat + ", " + coords.lng;
@@ -311,6 +317,21 @@
             .then(data => {
                 const destroyed_buildings = data.elements;
                 console.log(destroyed_buildings);
+
+                // make these buildings destroyed
+                function matchIds(building_corners_store) {
+                    for (each in destroyed_buildings) {                                                                //  this bit will check in each of the destroyed buildings
+                        for (each in enemy_nodes) {                                                                    //  whether any are included in enemy_nodes
+                            return destroyed_buildings[each].nodes.includes(enemy_nodes)                               //  it doesnt work properly
+                        };
+
+
+
+
+                    }
+                }
+                building_corners_store.find(matchIds).role = role;
+                console.log(building_corners_store.find(matchIds));
 
                 // get number of buildings and not corners
                 let destroyed_ways_and_relations = destroyed_buildings.filter(function (not_nodes) {
