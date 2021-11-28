@@ -164,27 +164,27 @@
 
 
     // give options to change city                                                 // not working yet, might scrap this bit
-    var option_manchester = document.getElementById('manchester_option');
-    var option_westminster = document.getElementById('westminster_option');
-    var option_paris = document.getElementById('paris_option');
+    // var option_manchester = document.getElementById('manchester_option');
+    // var option_westminster = document.getElementById('westminster_option');
+    // var option_paris = document.getElementById('paris_option');
 
-    function check_options() {
-        if (option_manchester.checked) {
-            console.log("manchester option chosen");
-            coordinates = [53.467790, -2.237423];
-        } else if (option_westminster.checked) {
-            console.log("westminster option chosen");
-            coordinates = [51.49834, -0.13302];
-        } else if (option_paris.checked) {
-            console.log("paris option chosen");
-            coordinates = [48.85723, 2.29649];
-        }
-        map.setView(coordinates, 16);
+    // function check_options() {
+    //     if (option_manchester.checked) {
+    //         console.log("manchester option chosen");
+    coordinates = [53.467790, -2.237423];
+    //     } else if (option_westminster.checked) {
+    //       console.log("westminster option chosen");
+    //        coordinates = [51.49834, -0.13302];
+    //    } else if (option_paris.checked) {
+    //         console.log("paris option chosen");
+    //        coordinates = [48.85723, 2.29649];
+    //    }
+    map.setView(coordinates, 16);
 
-    }
-    option_manchester.addEventListener('click', check_options());
-    option_westminster.addEventListener('click', check_options());
-    option_paris.addEventListener('click', check_options());
+    // }
+    // option_manchester.addEventListener('click', check_options());
+    //option_westminster.addEventListener('click', check_options());
+    // option_paris.addEventListener('click', check_options());
 
     // get bounding box of the map as it is displayed
     const bounds = map.getBounds();
@@ -210,6 +210,7 @@
     // document.getElementById('debug2').innerHTML = "<a href='" + overpass_query + "'>" + overpass_query + "</a>";            // display on page for debugging
 
     // initialise the scores etc
+    var game_in_progress = false;
     var building_corners_store = [];
     var number_of_buildings_destroyed = 0;
     let player_nodes = [];
@@ -223,7 +224,7 @@
         }
     }
     function gameplay() {
-
+        game_in_progress = true;
         if (turn === 0) {
             document.getElementById('turn_data').innerHTML = "Computer's turn";
         } else if (turn === 1) {
@@ -332,8 +333,8 @@
     );
 
     player_nuke_marker.addTo(map);
-    player_nuke_marker.setOpacity(1);
-    swap_turn();
+    // player_nuke_marker.setOpacity(1);
+    // swap_turn();
 
     //function for blowing up buildings
     function detonate() {
@@ -390,26 +391,36 @@
 
 
         // set conditions for computer's turn
-        while (turn === 0) {
-            player_nuke_marker.setOpacity(0);
-            var random_latitude = Math.random() * (bounds_south - bounds_north) + bounds_north;
-            var random_longitude = Math.random() * (bounds_west - bounds_east) + bounds_east;
-            var random_coordinates = [];
-            random_coordinates.push(random_latitude);
-            random_coordinates.push(random_longitude);
-            // function to display computer's nuke marker
-            var rocket_icon = L.icon({
-                iconUrl: 'rocket.svg',
-                iconSize: [50, 100]
-            });
-            var computer_nuke_marker = L.marker(random_coordinates,
-                {
-                    draggable: true,
-                    icon: rocket_icon
-                }
-            );
-            computer_nuke_marker.addTo(map);
-            swap_turn();
+        while (game_in_progress = true) {
+            while (turn === 0) {
+                player_nuke_marker.setOpacity(0);
+
+                var random_latitude = Math.random() * (bounds_south - bounds_north) + bounds_north;
+                var random_longitude = Math.random() * (bounds_west - bounds_east) + bounds_east;
+                var random_coordinates = [];
+                random_coordinates.push(random_latitude);
+                random_coordinates.push(random_longitude);
+                // function to display computer's nuke marker
+                var rocket_icon = L.icon({
+                    iconUrl: 'rocket.svg',
+                    iconSize: [50, 100]
+                });
+                var computer_nuke_marker = L.marker(random_coordinates,
+                    {
+                        draggable: true,
+                        icon: rocket_icon
+                    }
+                );
+
+                computer_nuke_marker.addTo(map);
+                computer_nuke_marker.setOpacity(1);
+                swap_turn();
+            }
+            while (turn === 1) {
+                player_nuke_marker.setOpacity(1);
+                computer_nuke_marker.setOpacity(0);
+                swap_turn();
+            }
         }
 
         gameplay();
