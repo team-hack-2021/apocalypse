@@ -332,6 +332,7 @@
     );
 
     player_nuke_marker.addTo(map);
+    player_nuke_marker.setOpacity(1);
     swap_turn();
 
     //function for blowing up buildings
@@ -364,7 +365,7 @@
                     destroyed_building_nodes.push(destroyed_buildings[each].id);
                 }
                 if (destroyed_building_nodes.some(r => enemy_nodes.includes(r))) {
-                    console.log(destroyed_building_nodes.some(r => enemy_nodes.includes(r)));
+                    console.log(destroyed_building_nodes.some(each => enemy_nodes.includes(each)));
                     building_corners_store.find(building_corners_store[each].id).role = 'destroyed';
                     console.log("enemy building destroyed");
                 }
