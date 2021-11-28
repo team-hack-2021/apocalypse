@@ -107,7 +107,7 @@
 
         body {
             background-color: rgb(233, 78, 25);
-            animation: 60s heurot infinite;
+            animation: 60s huerot infinite;
             font-family: 'OCR', 'OCR-A', 'OCR-B', 'OCR A', 'OCR B', 'OCR A Extended', 'OCR B Extended', monospace;
         }
 
@@ -369,7 +369,7 @@
                 console.log(number_of_buildings_destroyed);
                 document.getElementById('destroyed_buildings_count').innerHTML = number_of_buildings_destroyed;
             })
-        var turn = 0;
+        var turn = 1;
         function swap_turn() {
             if (turn === 0) {
                 turn = 1;
@@ -386,6 +386,11 @@
             }
         }
         gameplay();
+
+        // set conditions for computer's turn
+        while (turn === 0) {
+            player_nuke_marker.setOpacity(0);
+        }
 
     }
 
