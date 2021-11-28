@@ -14,7 +14,7 @@
     <title>apocalypse</title>
     <style>
         #map {
-            height: 500px;
+            height: 800px;
         }
 
         @keyframes orangey {
@@ -99,8 +99,15 @@
     <img src="logo-line.svg" style="width:60vw;height:auto;margin:auto;padding:20px;">
     <div class="choice">
         <form>
-            <input type="radio">
-            <input type="text" id="location" </form>
+            <input type="radio" id="manchester_option" name="location_radios" checked><label for="manchester_option"
+                id="manchester_option_label">Oxford Rd, Manchester</label>
+            <input type="radio" id="westminster_option" name="location_radios"><label for="westminster_option"
+                id="westminster_option_label">Westminster, London</label>
+            <input type="radio" id="paris_option" name="location_radios"><label for="paris_option"
+                id="paris_option_label">Eiffel Tower,
+                Paris</label>
+            <input type="text" id="location" placeholder="Or choose your own location...">
+        </form>
     </div>
     <div id="map">
 
@@ -110,8 +117,18 @@
     <div id="debug2"></div>
 </body>
 <script>
-    // initialises the map
-    var map = L.map('map').setView([53.467790, -2.237423], 16);
+    // custom map locations
+    var coordinates = [53.467790, -2.237423];
+    var map = L.map('map', {
+        zoomControl: false,
+        dragging: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        scrollWheelZoom: false
+    }).setView(coordinates, 16);
+
+
+
     L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
 	
 	var player_nuke_marker = L.marker([53.467790, -2.237423], 
@@ -126,6 +143,29 @@
 		.addTo(map);
 	}
 	
+    var option_manchester = document.getElementById('manchester_option');
+    var option_westminster = document.getElementById('westminster_option');
+    var option_paris = document.getElementById('paris_option');
+
+
+    function check_options() {
+        if (option_manchester.checked) {
+            console.log("manchester option chosen");
+            coordinates = [53.467790, -2.237423];
+        } else if (option_westminster.checked) {
+            console.log("westminster option chosen");
+            coordinates = [51.49834, -0.13302];
+        } else if (option_paris.checked) {
+            console.log("paris option chosen");
+            coordinates = [48.85723, 2.29649];
+        }
+        map.setView(coordinates, 16);
+
+    }
+    option_manchester.addEventListener('click', check_options());
+    option_westminster.addEventListener('click', check_options());
+    option_paris.addEventListener('click', check_options());
+
     // get bounding box of the map as it is displayed
     const bounds = map.getBounds();
     console.log(bounds);
@@ -202,12 +242,12 @@
                 //              console.log(lat);
                 //              console.log(lon);
 
-                //              // add corners to an array                                                         // it feels like
-                //              var latlong = "[" + lat + ", " + lon + "]";                                        // there should be 
-                //              console.log(latlong);                                                              // a simpler way
-                //              latlongs = localStorage.getItem('latlongs') || latlong;                            // of doing this
-                //              latlongs.push(latlong);                                                            // but im tired 
-                //              localStorage.setItem('latlongs', latlongs);                                        // someone help pls
+                //              // add corners to an array                                                        
+                //              var latlong = "[" + lat + ", " + lon + "]";                                        
+                //              console.log(latlong);                                                              
+                //              latlongs = localStorage.getItem('latlongs') || latlong;                            
+                //              latlongs.push(latlong);                                                             
+                //              localStorage.setItem('latlongs', latlongs);                                        
                 //          })
                 //  }
                 // localStorage.setItem('latlongs', latlongs);
@@ -226,10 +266,24 @@
             }
             random_building();
 
-            // display a building on the map
-            function display_building() {
-
+            // function to display any building on the map
+            function display_map(node_id) {
+                var node = all_building_corners.filter(function (find_node) {                    // this bit isn't working
+                    return find_node.id === node_id;
+                });
+                console.log("hello" + node);
+                var lat = node.lat;
+                var lon = node.lon;
+                var lat_long = [];
+                lat_long.push(lat);
+                lat_long.push(lon);
+                console.log(lat_long);
+                L.marker(lat_long).addTo(map);
             }
+            display_map(226464660);
+
+            // function to draw nuke marker on map
+
         });
 
 
