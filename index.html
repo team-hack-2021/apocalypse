@@ -214,7 +214,22 @@
     var number_of_buildings_destroyed = 0;
     let player_nodes = [];
     let enemy_nodes = [];
+    var turn = 1;
+    function swap_turn() {
+        if (turn === 0) {
+            turn = 1;
+        } else if (turn === 1) {
+            turn = 0;
+        }
+    }
+    function gameplay() {
 
+        if (turn === 0) {
+            document.getElementById('turn_data').innerHTML = "Computer's turn";
+        } else if (turn === 1) {
+            document.getElementById('turn_data').innerHTML = "Your turn";
+        }
+    }
     // fetch all buildings on map
     fetch(overpass_query)
         .then(response => response.json())
@@ -304,19 +319,20 @@
 
 
         });
-    // function to display nuke marker
-    var rocket_icon = L.icon({
-        iconUrl: 'rocket.svg',
+    // function to display player's nuke marker
+    var orange_rocket_icon = L.icon({
+        iconUrl: 'rocket-orange.svg',
         iconSize: [50, 100]
     });
     var player_nuke_marker = L.marker([53.467790, -2.237423],
         {
             draggable: true,
-            icon: rocket_icon
+            icon: orange_rocket_icon
         }
     );
 
     player_nuke_marker.addTo(map);
+    swap_turn();
 
     //function for blowing up buildings
     function detonate() {
@@ -369,28 +385,33 @@
                 console.log(number_of_buildings_destroyed);
                 document.getElementById('destroyed_buildings_count').innerHTML = number_of_buildings_destroyed;
             })
-        var turn = 1;
-        function swap_turn() {
-            if (turn === 0) {
-                turn = 1;
-            } else if (turn === 1) {
-                turn = 0;
-            }
-        }
-        function gameplay() {
 
-            if (turn === 0) {
-                document.getElementById('turn_data').innerHTML = "Computer's turn";
-            } else if (turn === 1) {
-                document.getElementById('turn_data').innerHTML = "Your turn";
-            }
-        }
-        gameplay();
+
 
         // set conditions for computer's turn
         while (turn === 0) {
             player_nuke_marker.setOpacity(0);
+            var random_latitude = Math.random() * (bounds_south - bounds_north) + bounds_north;
+            var random_longitude = Math.random() * (bounds_west - bounds_east) + bounds_east;
+            var random_coordinates = [];
+            random_coordinates.push(random_latitude);
+            random_coordinates.push(random_longitude);
+            // function to display computer's nuke marker
+            var rocket_icon = L.icon({
+                iconUrl: 'rocket.svg',
+                iconSize: [50, 100]
+            });
+            var computer_nuke_marker = L.marker(random_coordinates,
+                {
+                    draggable: true,
+                    icon: rocket_icon
+                }
+            );
+            computer_nuke_marker.addTo(map);
+            swap_turn();
         }
+
+        gameplay();
 
     }
 
