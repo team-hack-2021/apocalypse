@@ -63,14 +63,45 @@
             }
         }
 
+        @keyframes huerot {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+
+            25% {
+                filter: hue-rotate(90deg);
+            }
+
+            50% {
+                filter: hue-rotate(180deg);
+            }
+
+            75% {
+                filter: hue-rotate(270deg);
+            }
+
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
         body {
             animation: 60s orangey infinite;
+        }
+
+        #map {
+            animation: 60s huerot infinite;
         }
     </style>
 </head>
 
 <body>
     <img src="logo-line.svg" style="width:60vw;height:auto;margin:auto;padding:20px;">
+    <div class="choice">
+        <form>
+            <input type="radio">
+            <input type="text" id="location" </form>
+    </div>
     <div id="map">
 
     </div>
