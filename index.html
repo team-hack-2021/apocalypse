@@ -16,6 +16,26 @@
         #map {
             height: 800px;
         }
+		
+		#btn_div {
+			text-align: center;
+			padding-right: 200px;
+		}
+		
+		#detonate_btn {
+			text-align: top;
+			color: white;
+			background-color: black;
+			height: 15px;
+			width: 20%;
+			padding: 20px 0;
+			position: absolute;
+		}
+		
+		#destroyed_buildings_count {
+			text-align: center;
+			padding-left: 120px;
+		}
 
         @keyframes orangey {
             0% {
@@ -114,7 +134,10 @@
     <div id="map">
 
     </div>
+	<div id="btn_div">
     <button id="detonate_btn" type="button" onclick="detonate()">Detonate</button>
+	</div>
+	
     <div id="debug1" style="display:none;"></div>
     <div id="debug2" style="display:none;"></div>
     <div class="scores">
