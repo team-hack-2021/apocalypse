@@ -14,7 +14,7 @@
     <title>apocalypse</title>
     <style>
         #map {
-            height: 500px;
+            height: 800px;
         }
 
         @keyframes orangey {
@@ -118,7 +118,13 @@
 <script>
     // custom map locations
     var coordinates = [53.467790, -2.237423];
-    var map = L.map('map').setView(coordinates, 16);
+    var map = L.map('map', {
+        zoomControl: false,
+        dragging: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        scrollWheelZoom: false
+    }).setView(coordinates, 16);
 
 
 
@@ -263,6 +269,9 @@
                 L.marker(lat_long).addTo(map);
             }
             display_map(226464660);
+
+            // function to draw nuke marker on map
+
         });
 
 
