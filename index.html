@@ -324,7 +324,12 @@
                 for (each in destroyed_buildings) {
                     destroyed_building_nodes.push(destroyed_buildings[each].id);
                 }
-                console.log(destroyed_building_nodes.some(r => enemy_nodes.includes(r)));
+                if (destroyed_building_nodes.some(r => enemy_nodes.includes(r))) {
+                    console.log(destroyed_building_nodes.some(r => enemy_nodes.includes(r)));
+                    building_corners_store.find(building_corners_store[each].id).role = 'destroyed';
+                    console.log("enemy building destroyed");
+                }
+
 
 
                 // get number of buildings and not corners
