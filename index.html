@@ -304,7 +304,7 @@
             .addTo(map);
         var coords_for_overpass = coords.lat + ", " + coords.lng;
         console.log(coords_for_overpass);
-        var destroyed_buildings_url = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A25%5D%3B%0A%28%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0Anode%5B%22building%22%5D%28around%3A200.0%2C%20" + coords_for_overpass + "%29%3B%0Away%5B%22building%22%5D%28around%3A200.0%2C%20" + coords_for_overpass + "%29%3B%0Arelation%5B%22building%22%5D%28around%3A200.0%2C%205" + coords_for_overpass + " %29%3B%0A%29%3B%0Aout%20body%3B%0A%3E%3B%0Aout%20skel%20qt%3B";
+        var destroyed_buildings_url = "https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A25%5D%3B%0A%28%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%0Anode%5B%22building%22%5D%28around%3A200.0%2C%20" + coords_for_overpass + "%29%3B%0Away%5B%22building%22%5D%28around%3A200.0%2C%20" + coords_for_overpass + "%29%3B%0Arelation%5B%22building%22%5D%28around%3A200.0%2C%20" + coords_for_overpass + " %29%3B%0A%29%3B%0Aout%20body%3B%0A%3E%3B%0Aout%20skel%20qt%3B";
         fetch(destroyed_buildings_url)
             .then(response => response.json())
             .then(data => {
