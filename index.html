@@ -105,6 +105,7 @@
     <div id="map">
 
     </div>
+	<button id="detonate_btn" type="button" onclick="detonate()">Detonate</button>
     <div id="debug1"></div>
     <div id="debug2"></div>
 </body>
@@ -112,7 +113,19 @@
     // initialises the map
     var map = L.map('map').setView([53.467790, -2.237423], 16);
     L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { foo: 'bar', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
-
+	
+	var player_nuke_marker = L.marker([53.467790, -2.237423], 
+	{draggable: true}
+	);
+	
+	player_nuke_marker.addTo(map);
+	
+	function detonate() {
+		var coords = player_nuke_marker.getLatLng();
+		var circle = L.circle(coords, {radius: 200})
+		.addTo(map);
+	}
+	
     // get bounding box of the map as it is displayed
     const bounds = map.getBounds();
     console.log(bounds);
