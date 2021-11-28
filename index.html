@@ -112,6 +112,7 @@
     <div id="map">
 
     </div>
+    <button id="detonate_btn" type="button" onclick="detonate()">Detonate</button>
     <div id="debug1"></div>
     <div id="debug2"></div>
 </body>
@@ -268,12 +269,22 @@
                 console.log(lat_long);
                 L.marker(lat_long).addTo(map);
             }
-            display_map(226464660);
+            // display_map(226464660);
 
-            // function to draw nuke marker on map
 
         });
+    // function to display nuke marker
+    var player_nuke_marker = L.marker([53.467790, -2.237423],
+        { draggable: true }
+    );
 
+    player_nuke_marker.addTo(map);
+
+    function detonate() {
+        var coords = player_nuke_marker.getLatLng();
+        var circle = L.circle(coords, { radius: 200 })
+            .addTo(map);
+    }
 
 </script>
 <!-- <script src="battleships.js"></script> -->
